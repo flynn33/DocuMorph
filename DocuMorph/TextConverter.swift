@@ -1,7 +1,4 @@
-// TextConverter.swift (For plain TXT)
-
 import Foundation
-
 
 class TextConverter: DocumentConverter {
     let supportedExtensions = ["txt"]
@@ -11,13 +8,20 @@ class TextConverter: DocumentConverter {
         
         switch format {
         case .markdown:
-            return text
+            return ReadableOutputFormatter.markdownDocument(
+                title: ReadableOutputFormatter.readableTitle(from: url),
+                text: text
+            )
         case .json:
-            guard let jsonData = try? JSONSerialization.data(withJSONObject: ["content": text], options: .prettyPrinted),
-                  let jsonString = String(data: jsonData, encoding: .utf8) else {
+            do {
+                return try ReadableOutputFormatter.jsonDocument(
+                    fileName: url.lastPathComponent,
+                    sourceExtension: url.pathExtension,
+                    text: text
+                )
+            } catch {
                 throw ConversionError.jsonSerializationFailed
             }
-            return jsonString
         }
     }
 }

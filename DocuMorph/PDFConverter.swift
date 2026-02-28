@@ -1,6 +1,3 @@
-// PDFConverter.swift (Concrete class for PDF, implements protocol)
-
-
 import PDFKit
 import Foundation
 
@@ -11,37 +8,28 @@ class PDFConverter: DocumentConverter {
         guard let pdfDocument = PDFDocument(url: url) else {
             throw ConversionError.invalidDocument
         }
-        
-        var output = ""
+
+        let pageTexts = (0..<pdfDocument.pageCount).map { pageIndex in
+            pdfDocument.page(at: pageIndex)?.string ?? ""
+        }
         
         switch format {
         case .markdown:
-            output += "# Converted PDF\n\n"
-            for pageIndex in 0..<pdfDocument.pageCount {
-                guard let page = pdfDocument.page(at: pageIndex) else { continue }
-                let pageText = page.string ?? ""
-                
-                let lines = pageText.components(separatedBy: .newlines)
-                if let firstLine = lines.first, !firstLine.isEmpty {
-                    output += "## Page \(pageIndex + 1): \(firstLine)\n\n"
-                }
-                output += lines.dropFirst().joined(separator: "\n") + "\n\n"
-            }
-            
+            return ReadableOutputFormatter.markdownDocument(
+                title: ReadableOutputFormatter.readableTitle(from: url),
+                pageTexts: pageTexts
+            )
+
         case .json:
-            var pages: [[String: String]] = []
-            for pageIndex in 0..<pdfDocument.pageCount {
-                guard let page = pdfDocument.page(at: pageIndex) else { continue }
-                pages.append(["page": String(pageIndex + 1), "text": page.string ?? ""])
-            }
-            
-            guard let jsonData = try? JSONSerialization.data(withJSONObject: ["pages": pages], options: .prettyPrinted),
-                  let jsonString = String(data: jsonData, encoding: .utf8) else {
+            do {
+                return try ReadableOutputFormatter.jsonDocument(
+                    fileName: url.lastPathComponent,
+                    sourceExtension: url.pathExtension,
+                    pageTexts: pageTexts
+                )
+            } catch {
                 throw ConversionError.jsonSerializationFailed
             }
-            output = jsonString
         }
-        
-        return output
     }
 }

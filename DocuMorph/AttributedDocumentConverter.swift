@@ -1,6 +1,3 @@
-// Updated AttributedDocumentConverter.swift (replace the entire file with this)
-// Ensure imports are at the top: Foundation for URL, JSONSerialization, CharacterSet; AppKit for NSAttributedString.
-
 import Foundation
 import AppKit
 
@@ -19,8 +16,8 @@ class AttributedDocumentConverter: DocumentConverter {
     }
     
     func convert(at url: URL, to format: OutputFormat) throws -> String {
-        let ext = url.pathExtension.lowercased()
-        guard let docType = documentType(for: ext) else {
+        let sourceExtension = url.pathExtension.lowercased()
+        guard let docType = documentType(for: sourceExtension) else {
             throw ConversionError.unsupportedFormat
         }
         
@@ -30,17 +27,20 @@ class AttributedDocumentConverter: DocumentConverter {
         
         switch format {
         case .markdown:
-            // Basic paragraph separation
-            return text.components(separatedBy: .newlines)
-                .map { $0.trimmingCharacters(in: .whitespaces) }
-                .filter { !$0.isEmpty }
-                .joined(separator: "\n\n")
+            return ReadableOutputFormatter.markdownDocument(
+                title: ReadableOutputFormatter.readableTitle(from: url),
+                text: text
+            )
         case .json:
-            guard let jsonData = try? JSONSerialization.data(withJSONObject: ["content": text], options: .prettyPrinted),
-                  let jsonString = String(data: jsonData, encoding: .utf8) else {
+            do {
+                return try ReadableOutputFormatter.jsonDocument(
+                    fileName: url.lastPathComponent,
+                    sourceExtension: sourceExtension,
+                    text: text
+                )
+            } catch {
                 throw ConversionError.jsonSerializationFailed
             }
-            return jsonString
         }
     }
 }

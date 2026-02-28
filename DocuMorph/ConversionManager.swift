@@ -1,6 +1,3 @@
-// Updated ConversionManager.swift (replace the entire file with this)
-// Add import Foundation for FileManager, URL, utf8.
-
 import Foundation
 
 class ConversionManager {
@@ -22,9 +19,11 @@ class ConversionManager {
             if let converter = converters.first(where: { $0.supportedExtensions.contains(ext) }) {
                 let output = try converter.convert(at: fileURL, to: format)
                 
-                let fileName = fileURL.lastPathComponent
                 let outputExt = format == .markdown ? "md" : "json"
-                let outputURL = targetURL.appendingPathComponent(fileName.replacingOccurrences(of: ".\(ext)", with: ".\(outputExt)"))
+                let outputFileName = fileURL.deletingPathExtension().lastPathComponent
+                let outputURL = targetURL
+                    .appendingPathComponent(outputFileName)
+                    .appendingPathExtension(outputExt)
                 
                 try output.write(to: outputURL, atomically: true, encoding: .utf8)
             }
