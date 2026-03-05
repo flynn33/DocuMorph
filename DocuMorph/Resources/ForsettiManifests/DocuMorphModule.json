@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "moduleID": "com.daley.jim.documorph",
+  "displayName": "DocuMorph",
+  "moduleVersion": {
+    "major": 2,
+    "minor": 0,
+    "patch": 0,
+    "prerelease": null
+  },
+  "moduleType": "app",
+  "supportedPlatforms": ["macOS"],
+  "minForsettiVersion": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0,
+    "prerelease": null
+  },
+  "maxForsettiVersion": null,
+  "capabilitiesRequested": ["file_export", "storage"],
+  "iapProductID": null,
+  "entryPoint": "DocuMorphModule"
+}

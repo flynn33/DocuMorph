@@ -1,6 +1,6 @@
 import Foundation
 
-class ConversionManager {
+final class ConversionManager {
     private let fileManager: FileManager
     private let converters: [DocumentConverter]
     

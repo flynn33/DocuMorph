@@ -1,13 +1,17 @@
-// DocuMorphApp.swift (Entry point, remains similar but updated for modularity)
-// Create a new macOS App project in Xcode if starting fresh.
-
 import SwiftUI
+import ForsettiHostTemplate
 
 @main
 struct DocuMorphApp: App {
+    @StateObject private var container = DocuMorphContainer()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ForsettiHostRootView(
+                controller: container.controller,
+                injectionRegistry: container.injectionRegistry,
+                showDeveloperControls: false
+            )
         }
     }
 }

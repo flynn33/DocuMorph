@@ -1,7 +1,7 @@
 import Foundation
 import AppKit
 
-class AttributedDocumentConverter: DocumentConverter {
+final class AttributedDocumentConverter: DocumentConverter {
     let supportedExtensions = ["docx", "doc", "rtf", "odt", "html", "htm"]
     
     private func documentType(for ext: String) -> NSAttributedString.DocumentType? {

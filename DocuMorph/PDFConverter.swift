@@ -1,7 +1,7 @@
 import PDFKit
 import Foundation
 
-class PDFConverter: DocumentConverter {
+final class PDFConverter: DocumentConverter {
     let supportedExtensions = ["pdf"]
     
     func convert(at url: URL, to format: OutputFormat) throws -> String {

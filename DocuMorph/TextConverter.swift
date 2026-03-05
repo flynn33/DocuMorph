@@ -1,6 +1,6 @@
 import Foundation
 
-class TextConverter: DocumentConverter {
+final class TextConverter: DocumentConverter {
     let supportedExtensions = ["txt"]
     
     func convert(at url: URL, to format: OutputFormat) throws -> String {
