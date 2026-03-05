@@ -1,5 +1,7 @@
 # DocuMorph
 
+**Current Version: 2.0.0** <!-- x-release-please-version -->
+
 DocuMorph is a macOS SwiftUI app that batch-converts documents from a source folder into human-readable Markdown (`.md`) or structured JSON (`.json`) in a target folder.
 
 Built with the [Forsetti Framework](https://github.com/jdaley/Forsetti-Framework) — a proprietary modular Swift runtime framework for native Apple applications.

@@ -51,8 +51,55 @@ xcodebuild -project "DocuMorph.xcodeproj" \
    - Add comments where necessary.
    - Update documentation if features change.
 4. **Test Your Changes**: Build and run the app in Xcode. Test conversions with sample files.
-5. **Commit Changes**: Use clear commit messages, e.g., "Add support for TXT files in TextConverter".
+5. **Commit Changes**: Use [Conventional Commits](#commit-message-convention) format, e.g., `feat: add support for TXT files in TextConverter`.
 6. **Submit a Pull Request**: Target the main branch. Include a description of changes, why they're needed, and any relevant issues.
+
+## Commit Message Convention
+
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) to automate versioning and changelog generation via [release-please](https://github.com/googleapis/release-please).
+
+All commits to `main` must follow this format:
+
+```
+<type>[optional scope]: <description>
+```
+
+### Types
+
+| Type | Purpose | Version Bump |
+|------|---------|-------------|
+| `feat:` | A new feature | Minor (e.g., 2.1.0) |
+| `fix:` | A bug fix | Patch (e.g., 2.0.1) |
+| `docs:` | Documentation only | No release |
+| `chore:` | Maintenance tasks | No release |
+| `refactor:` | Code restructuring | No release |
+| `test:` | Adding or updating tests | No release |
+| `ci:` | CI/CD changes | No release |
+
+### Breaking Changes
+
+Append `!` after the type for breaking changes. This triggers a major version bump.
+
+```
+feat!: redesign conversion pipeline API
+```
+
+### Examples
+
+```
+feat: add EPUB input format support
+fix: handle non-UTF8 text files gracefully
+docs: update wiki with new converter instructions
+feat(pdf): add OCR fallback for scanned PDFs
+```
+
+### How It Works
+
+When commits are pushed to `main`, release-please automatically:
+1. Analyzes commit messages since the last release.
+2. Creates or updates a release PR with a draft CHANGELOG.
+3. When the release PR is merged, creates a GitHub Release and tag.
+4. A post-release step syncs the new version to Xcode project settings, Forsetti manifests, and Swift source.
 
 ## Reporting Issues
 
